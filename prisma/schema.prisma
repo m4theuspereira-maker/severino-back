@@ -1,0 +1,120 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x", "linux-musl", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int               @id @default(autoincrement())
+  email            String            @db.Text
+  password         String            @db.VarChar(250)
+  name             String?           @db.Text
+  cpf              String            @db.VarChar(14)
+  balanceId        Int?              @unique
+  isAdmin          Boolean?          @default(false)
+  isInfluencer     Boolean?          @default(false)
+  phone            String            @db.Text
+  username         String?           @db.Text
+  createdAt        DateTime          @default(now())
+  indicationId     String?
+  indicatedId      String?
+  indicatedDate    DateTime?
+  updatedAt        DateTime?
+  deletedAt        DateTime?
+  payments         Payment[]
+  balance          Balance?
+  withdrawRequests WithdrawRequest[]
+  match            Match[]
+  matchHistory     MatchHistory[]
+
+  @@index([indicationId, deletedAt])
+  @@index([cpf, deletedAt])
+  @@index([email(length: 191), deletedAt])
+  @@index([updatedAt])
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  transactionId String
+  qrcode        String
+  price         Int
+  userId        Int
+  status        PaymentStatus
+  user          User          @relation(fields: [userId], references: [id])
+  balance       Balance       @relation(fields: [balanceId], references: [id])
+  balanceId     Int
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?
+  deletedAt     DateTime?
+}
+
+model Balance {
+  id        Int       @id @default(autoincrement())
+  amount    Int
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+  payment   Payment[]
+}
+
+model WithdrawRequest {
+  id        Int           @id @default(autoincrement())
+  amount    Int
+  pixKey    String
+  userId    Int
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  deletedAt DateTime?
+  user      User          @relation(fields: [userId], references: [id])
+}
+
+model Match {
+  id           Int            @id @default(autoincrement())
+  betValue     Int
+  songId       Int
+  user         User           @relation(fields: [userId], references: [id])
+  status       MatchStatus    @default(STAND_BY)
+  userId       Int
+  message      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  deletedAt    DateTime?
+  matchHistory MatchHistory[]
+}
+
+model MatchHistory {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  matchId   Int
+  user      User      @relation(fields: [userId], references: [id])
+  match     Match     @relation(fields: [matchId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([userId, createdAt])
+  @@index([matchId, createdAt])
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  CONFIRMED
+  INSUFFICIENT_FUNDS
+}
+
+enum MatchStatus {
+  STAND_BY
+  STARTED
+  FINISHED
+  DISCONNECTED
+  ERROR
+}
