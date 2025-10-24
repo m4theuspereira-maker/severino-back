@@ -1,11 +1,10 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
   binaryTargets   = ["native", "rhel-openssl-1.0.x", "linux-musl", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
@@ -34,7 +33,6 @@ model User {
 
   @@index([indicationId, deletedAt])
   @@index([cpf, deletedAt])
-  @@index([email(length: 191), deletedAt])
   @@index([updatedAt])
 }
 
