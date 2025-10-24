@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Severino tem objetivo de gerenciar o cadastro e o check-in em operaçõesde airsoft, que geralmente são feitas manualmente usando papel. Para facilitar o trabalho de quem fica na portaria várias processos tradicionamente são feitos de forma manual, serão feitas utilizando um sistema web. 
 
 ## Installation
 
