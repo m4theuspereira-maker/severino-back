@@ -57,9 +57,9 @@ export class UserController {
         { indicationId: true },
       );
 
-      if (!userWhoIndicated) {
-        return notFoundError(res, 'User who indicated was not found');
-      }
+      // if (!userWhoIndicated) {
+      //   return notFoundError(res, 'User who indicated was not found');
+      // }
     }
 
     if (!this.userService.validateCpf(user.cpf)) {

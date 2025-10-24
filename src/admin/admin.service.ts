@@ -49,14 +49,8 @@ export class AdminService {
             email: true,
           },
         },
-      },
-      where: {
-        user: {
-          cpf: {
-            search: cpf,
-          },
-        },
-      },
+      }
+
     });
   }
 
