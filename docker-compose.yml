@@ -15,11 +15,7 @@ services:
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
-    command: >
-      sh -c "
-      npx prisma migrate deploy &&
-      npm start
-      "
+    init: true
 
   database:
     image: postgres:13

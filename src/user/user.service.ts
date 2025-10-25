@@ -8,7 +8,7 @@ import {
 } from './dto/types';
 import { PrismaService } from '../database/prisma.service';
 import { AuthenticationService } from '../authentication/authentication.service';
-import { $Enums, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -244,7 +244,7 @@ export class UserService {
     pixKey,
   }: CreateWithDrawRequest) {
     return this.prisma.withdrawRequest.create({
-      data: { userId, amount, pixKey, status: $Enums.PaymentStatus.PENDING },
+      data: { userId, amount, pixKey, },
     });
   }
 
