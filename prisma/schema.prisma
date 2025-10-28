@@ -19,6 +19,8 @@ model User {
   isInfluencer     Boolean?          @default(false)
   phone            String            @db.Text
   username         String?           @db.Text
+  city             String?           @db.Text
+  state            String?           @db.Text
   createdAt        DateTime          @default(now())
   indicationId     String?
   indicatedId      String?
@@ -30,10 +32,32 @@ model User {
   withdrawRequests WithdrawRequest[]
   match            Match[]
   matchHistory     MatchHistory[]
+  operator         Operator?
 
   @@index([indicationId, deletedAt])
   @@index([cpf, deletedAt])
   @@index([updatedAt])
+}
+
+model Operator {
+  userId              Int @id @unique
+  user                User @relation(fields: [userId], references: [id])
+  teamId              Int?
+  team                Team? @relation(fields: [teamId], references: [id])
+  class               OperatorClass @default(FUZILEIRO)
+  isFirstTime         Boolean  @default(true)
+  participationDays   String[] @db.Text
+  comments            String? @db.Text
+}
+
+model Team {
+  id               Int @id @default(autoincrement())
+  name             String @unique
+  tag              String?
+  foundationDate   DateTime?
+  operators        Operator[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Payment {
@@ -115,4 +139,11 @@ enum MatchStatus {
   FINISHED
   DISCONNECTED
   ERROR
+}
+
+enum OperatorClass {
+  FUZILEIRO
+  SUPORTE
+  SNIPER
+  DMR
 }
