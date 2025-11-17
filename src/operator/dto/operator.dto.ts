@@ -1,35 +1,7 @@
-// import { ApiProperty } from '@nestjs/swagger';
-// import { IsISO8601, IsNotEmpty, IsOptional, IsString, IsInt, IsEnum, IsBoolean, isEnum } from 'class-validator';
-// import { OperatorClass } from '@prisma/client';
-
-
-// export class CreateOperatorDto {
-
-//   @ApiProperty({
-//     description: 'Classe tática do jogador/operator (ASSAULT, SNIPER, etc.)',
-//     example: OperatorClass.ASSAULT,
-//     enum: OperatorClass,
-//   })
-//   @IsEnum(OperatorClass)
-//   @IsOptional()
-//   class?: OperatorClass; 
-
-  
-
-//   @ApiProperty({
-//     description: 'ID do Time',
-//     example: 5,
-//   })
-//   @IsOptional()
-//   @IsInt()
-//   teamId?: number; 
-// }
-
-// src/operator/dto/create-operator.dto.ts
-
+import { OperatorClass } from 'src/@common/enums/operator-class.enum';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsBoolean, IsOptional, IsString, IsInt } from 'class-validator';
-import { OperatorClass } from '@prisma/client';
+
 
 export class CreateOperatorDto {
 
